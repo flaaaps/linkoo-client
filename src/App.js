@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import Register from './components/Register';
 import Home from './components/Home';
@@ -10,12 +10,14 @@ export const UserContext = React.createContext();
 
 function App() {
     const [user, setUser] = useState({}); // Handle with
-    const [loggedIn, setLoggedIn] = useState(false); // local storage
+    const [loggedIn, setLoggedIn] = useState(true); // local storage
 
     useEffect(() => {
         if (!!localStorage.getItem('user')) {
             setLoggedIn(true);
             setUser(JSON.parse(localStorage.getItem('user')));
+        } else {
+            setLoggedIn(false);
         }
     }, []);
 
@@ -26,7 +28,6 @@ function App() {
                 <Route component={Login} path="/login" />
                 <Route component={Register} path="/register" />
                 <Route component={Account} path="/account" />
-                {!loggedIn && <Redirect to="/" />}
             </BrowserRouter>
         </UserContext.Provider>
     );
