@@ -5,6 +5,8 @@ import { UserContext } from '../App';
 import * as api from '../api';
 import { Button, FormControl, InputGroup, Modal } from 'react-bootstrap';
 
+import { FaSlidersH } from 'react-icons/fa';
+
 function Home() {
     const { user, loggedIn } = useContext(UserContext);
     const [messages, setMessages] = useState([]);
@@ -22,7 +24,7 @@ function Home() {
     useEffect(() => {
         if (user.identifier) {
             api.getAllMessages(user.identifier).then((res) => {
-                console.log(res);
+                console.log('Fetched messages');
                 setMessages(res.messages);
                 setLoading(false);
             });
@@ -42,8 +44,15 @@ function Home() {
     };
 
     return (
-        <div className="w-75 mt-5 mx-auto">
-            <h1>Linkooo</h1>
+        <div className="w-50 mt-5 mx-auto">
+            <header className="d-flex justify-content-between align-items-center">
+                <h1>Linkoo</h1>
+                {user.identifier && (
+                    <Link to="/account" style={{ color: 'inherit' }}>
+                        <FaSlidersH size="30px" cursor="pointer" />
+                    </Link>
+                )}
+            </header>
             {user.identifier && (
                 <p>
                     Your name:
