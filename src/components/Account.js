@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { UserContext } from '../App';
 
 function Account() {
-    const { user, setLoggedIn, setUser } = useContext(UserContext);
+    const { user, setLoggedIn, loggedIn, setUser } = useContext(UserContext);
 
     const logout = () => {
         localStorage.removeItem('user');
@@ -21,11 +21,13 @@ function Account() {
             <p>
                 Account created at: <strong>{new Date(user.createdAt).toLocaleDateString(window.navigator.language)}</strong>
             </p>
-            <Button onClick={logout} className="my-2" style={{ width: '15rem' }}>
+            <Button onClick={logout} variant="outline-secondary" className="my-2" style={{ width: '15rem' }}>
                 Logout
             </Button>
             <br />
             <Link to="/">Back to home</Link>
+
+            {!loggedIn && <Redirect to="/" />}
         </div>
     );
 }
