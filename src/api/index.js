@@ -16,16 +16,12 @@ export function login(name) {
         });
 }
 
-export function register(name) {
-    return axios
-        .post(API_BASE_URL + '/register', {
-            name,
-        })
-        .then((res) => {
-            if (!res.data.success) console.log('Registration error:', res.data);
-            console.log('Registered:', res.data);
-            return res.data;
-        });
+export function register() {
+    return axios.post(API_BASE_URL + '/register').then((res) => {
+        if (!res.data.success) console.log('Registration error:', res.data);
+        console.log('Registered:', res.data);
+        return res.data;
+    });
 }
 
 export function getAllMessages(userId) {

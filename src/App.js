@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import Register from './components/Register';
@@ -10,6 +10,13 @@ export const UserContext = React.createContext();
 function App() {
     const [user, setUser] = useState({}); // Handle with
     const [loggedIn, setLoggedIn] = useState(false); // local storage
+
+    useEffect(() => {
+        if (!!localStorage.getItem('user')) {
+            setLoggedIn(true);
+            setUser(JSON.parse(localStorage.getItem('user')));
+        }
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, setUser, loggedIn, setLoggedIn }}>

@@ -8,11 +8,15 @@ import { Button, FormControl, InputGroup, Modal } from 'react-bootstrap';
 function Home() {
     const { user, loggedIn } = useContext(UserContext);
     const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const [messageValue, setMessageValue] = useState('');
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setMessageValue('');
+        setShow(false);
+    };
     const handleShow = () => setShow(true);
 
     useEffect(() => {
@@ -20,6 +24,7 @@ function Home() {
             api.getAllMessages(user.identifier).then((res) => {
                 console.log(res);
                 setMessages(res.messages);
+                setLoading(false);
             });
         }
     }, [user]);
@@ -39,29 +44,38 @@ function Home() {
     return (
         <div className="w-75 mt-5 mx-auto">
             <h1>Linkooo</h1>
-            <p>
-                Your name:
-                <br />
-                <strong>{user.name}</strong>
-            </p>
-            {!loggedIn ? (
-                <div className="d-flex justify-content-between" style={{ width: '120px' }}>
-                    <Link to="/register">Register</Link>
-                    <Link to="/login">Login</Link>
-                </div>
-            ) : (
+            {user.identifier && (
+                <p>
+                    Your name:
+                    <br />
+                    <strong>{user.name}</strong>
+                </p>
+            )}
+
+            {!loading && (
                 <div className="card" style={{ width: '28rem' }}>
                     <div className="card-header">Messages</div>
                     <ul className="list-group list-group-flush">
-                        {messages.map((message) => (
-                            <li className="list-group-item" key={message.id}>
-                                {message.content}
-                            </li>
-                        ))}
+                        {messages.length === 0 ? (
+                            <li className="list-group-item">You haven't sent any messages yet. </li>
+                        ) : (
+                            messages.map((message) => (
+                                <li className="list-group-item" key={message.id}>
+                                    {message.content}
+                                </li>
+                            ))
+                        )}
                         <li className="list-group-item text-primary cursor-pointer" onClick={handleShow} style={{ cursor: 'pointer' }}>
                             + Add item
                         </li>
                     </ul>
+                </div>
+            )}
+
+            {!loggedIn && (
+                <div className="d-flex justify-content-between" style={{ width: '120px' }}>
+                    <Link to="/register">Register</Link>
+                    <Link to="/login">Login</Link>
                 </div>
             )}
 
@@ -71,12 +85,12 @@ function Home() {
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={sendMessage}>
-                        <InputGroup className="mb-3">
+                        <InputGroup className="mb-2">
                             <FormControl
                                 value={messageValue}
                                 onChange={(e) => setMessageValue(e.target.value)}
-                                placeholder="Recipient's username"
-                                aria-label="Recipient's username"
+                                placeholder="Message"
+                                aria-label="Message"
                                 aria-describedby="basic-addon2"
                             />
                             <InputGroup.Append>
@@ -87,11 +101,6 @@ function Home() {
                         </InputGroup>
                     </form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </div>
     );

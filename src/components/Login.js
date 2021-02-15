@@ -19,6 +19,7 @@ function Login() {
         } else {
             console.log('Valid!');
             setUser(response.user);
+            localStorage.setItem('user', JSON.stringify(response.user));
             setLoggedIn(true);
         }
     };
