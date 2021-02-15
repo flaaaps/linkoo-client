@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 
 import Register from './components/Register';
 import Home from './components/Home';
 import Login from './components/Login';
+import Account from './components/Account';
 
 export const UserContext = React.createContext();
 
@@ -24,6 +25,8 @@ function App() {
                 <Route component={Home} exact path="/" />
                 <Route component={Login} path="/login" />
                 <Route component={Register} path="/register" />
+                <Route component={Account} path="/account" />
+                {!loggedIn && <Redirect to="/" />}
             </BrowserRouter>
         </UserContext.Provider>
     );
