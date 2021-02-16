@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../App';
 
-import * as api from '../api';
-import { Button, FormControl, InputGroup, Modal } from 'react-bootstrap';
+import * as api from '../../api';
 
 import { FaSlidersH } from 'react-icons/fa';
+import UserInfo from '../UserInfo';
+import MessageModal from '../MessageModal';
 
 function Home() {
     const { user, loggedIn } = useContext(UserContext);
@@ -43,6 +44,14 @@ function Home() {
         } // handle error!
     };
 
+    const modalProps = {
+        messageValue,
+        setMessageValue,
+        show,
+        setShow,
+        sendMessage,
+    };
+
     return (
         <div className="w-50 mt-5 mx-auto">
             <header className="d-flex justify-content-between align-items-center">
@@ -53,14 +62,7 @@ function Home() {
                     </Link>
                 )}
             </header>
-            {user.identifier && (
-                <p>
-                    Your name:
-                    <br />
-                    <strong>{user.name}</strong>
-                </p>
-            )}
-
+            <UserInfo user={user} />
             {!loading && (
                 <div className="card" style={{ width: '28rem' }}>
                     <div className="card-header">Messages</div>
@@ -88,29 +90,7 @@ function Home() {
                 </div>
             )}
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Message</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <form onSubmit={sendMessage}>
-                        <InputGroup className="mb-2">
-                            <FormControl
-                                value={messageValue}
-                                onChange={(e) => setMessageValue(e.target.value)}
-                                placeholder="Message"
-                                aria-label="Message"
-                                aria-describedby="basic-addon2"
-                            />
-                            <InputGroup.Append>
-                                <Button type="submit" variant="outline-secondary">
-                                    Send
-                                </Button>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </form>
-                </Modal.Body>
-            </Modal>
+            <MessageModal modalProps={modalProps} />
         </div>
     );
 }
