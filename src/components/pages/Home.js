@@ -16,6 +16,14 @@ function Home() {
     const [messageValue, setMessageValue] = useState('');
     const [show, setShow] = useState(false);
 
+    const [extensionInfo, setExtensionInfo] = useState({ present: false, id: null });
+
+    const extensionListener = (data) => {
+        console.log('Listener fired!');
+        setExtensionInfo({ present: true, id: data.detail.linkooExtensionId });
+    };
+    document.addEventListener('extension-event', extensionListener);
+
     const handleClose = () => {
         setMessageValue('');
         setShow(false);
@@ -34,7 +42,7 @@ function Home() {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        const response = await api.createMessage(user.identifier, messageValue);
+        const response = await api.createMessage(user.identifier, { content: messageValue, extensionId: extensionInfo.id });
         console.log(response, 'MESSAGE VALUE');
         if (response.success) {
             let messagesCopy = [...messages];
