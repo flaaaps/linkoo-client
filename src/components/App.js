@@ -9,9 +9,8 @@ import Account from './pages/Account';
 export const UserContext = React.createContext();
 
 function App() {
-    const [user, setUser] = useState({}); // Handle with
-    const [loggedIn, setLoggedIn] = useState(true); // local storage
-
+    const [user, setUser] = useState({});
+    const [loggedIn, setLoggedIn] = useState(true);
     useEffect(() => {
         if (!!localStorage.getItem('user')) {
             setLoggedIn(true);
@@ -19,6 +18,7 @@ function App() {
         } else {
             setLoggedIn(false);
         }
+        return false;
     }, []);
 
     return (
