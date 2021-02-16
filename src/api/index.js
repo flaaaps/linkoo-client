@@ -27,20 +27,19 @@ export function register() {
 export function getAllMessages(userId) {
     return axios.get(`${API_BASE_URL}/messages/all?userId=${userId}`).then((res) => {
         if (!res.data.success) console.log('Message error:', res.data);
-        console.log(res.data, 'MESSAGE DATA');
         return res.data;
     });
 }
 
-export function createMessage(userId, content) {
+export function createMessage(userId, { content, extensionId }) {
     return axios
         .post(API_BASE_URL + '/messages/create', {
             userId,
             content,
+            extensionId,
         })
         .then((res) => {
             if (!res.data.success) console.log('Message error:', res.data);
-            console.log(res.data, 'MESSAGE DATA');
             return res.data;
         });
 }
